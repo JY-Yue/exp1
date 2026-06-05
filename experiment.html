@@ -163,15 +163,6 @@
 	};
 	timeline.push(final_questions);
 
-	const save_data = {
-  		type: jsPsychPipe,
-  		action: "save",
-  		experiment_id: "9uzk0pO46pRZ",
-  		filename: filename,
-  		data_string: ()=>jsPsych.data.get().csv()
-	};
-	timeline.push(save_data)
-
 	// show something at the end!
 	var end_screen = {
 		type: 'html-button-response',
@@ -180,6 +171,15 @@
 		response_ends_trial: true
 	}
 	timeline.push(end_screen);
+
+	const save_data = {
+			type: jsPsychPipe,
+			action: "save",
+			experiment_id: "9uzk0pO46pRZ",
+			filename: filename,
+			data_string: ()=>jsPsych.data.get().csv()
+		};
+		timeline.push(save_data)
 
 	// if not set, pick random ID
 	if (subject_id == null || subject_id == "") {

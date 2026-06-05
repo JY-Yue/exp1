@@ -8,6 +8,7 @@
   <script src="jspsych-html-button-response.js"></script>
   <script src="jspsych-survey-multi-choice.js"></script>
   <script src="jspsych-survey-text.js"></script>
+  <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
   <link rel="stylesheet" href="css/jspsych.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <title>小红的行程</title>
@@ -22,6 +23,10 @@
 	var subject_id = url_params.get("prolific_pid");
 	// var session_id = url_params.get("SESSION_ID");
 	var subject_no = url_params.get("subject_no")
+
+	// This is for generating a random filename for DataPipe transmission onto OSF
+	const random_file_id = jsPsych.randomization.randomID(10);
+	const filename = `${random_file_id}.csv`;
 
 	var conditions = ["s", "l", "b", "n", "sm", "lm", "bm", "nm"];
 	var destinations = [
@@ -158,6 +163,15 @@
 	};
 	timeline.push(final_questions);
 
+	const save_data = {
+  		type: jsPsychPipe,
+  		action: "save",
+  		experiment_id: "9uzk0pO46pRZ",
+  		filename: filename,
+  		data_string: ()=>jsPsych.data.get().csv()
+	};
+	timeline.push(save_data)
+
 	// show something at the end!
 	var end_screen = {
 		type: 'html-button-response',
@@ -177,12 +191,12 @@
 		list: list_id
 	});
 
-	function saveData(name, data, list_id){
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send(JSON.stringify({filename: name + "_" + list_id, filedata: data}));
-	}
+	// function saveData(name, data, list_id){
+	// 	var xhr = new XMLHttpRequest();
+	// 	xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
+	// 	xhr.setRequestHeader('Content-Type', 'application/json');
+	// 	xhr.send(JSON.stringify({filename: name + "_" + list_id, filedata: data}));
+	// }
 
 	jsPsych.init({
 		timeline: timeline,
@@ -191,9 +205,9 @@
     	show_progress_bar: true,
 		message_progress_bar: '实验进度',
 		on_finish: function() {
-		    window.location.replace("https://app.prolific.co/submissions/complete?cc=4E95D836");
+		    window.location.replace("https://google.com");
 		},
-		on_trial_finish: function(){ saveData(subject_id, jsPsych.data.get().csv(), list_id); }
+		// on_trial_finish: function(){ saveData(subject_id, jsPsych.data.get().csv(), list_id); }
 	});
 
 </script>

@@ -65,7 +65,8 @@
 		var list_id = 5
 		current_list = trial_lists[list_id]
 	} else {
-		current_list = trial_lists[Math.floor(Math.random() * Math.floor(8))];
+		var list_id = Math.floor(Math.random() * Math.floor(8))
+		current_list = trial_lists[list_id];
 	}
 	console.log(current_list)
 	var timeline = []
@@ -160,8 +161,28 @@
 			{prompt: "你猜测这个实验是关于什么的？", rows: 3, columns: 50}, 
 			{prompt: "你有什么其他想反馈的想法吗？", rows: 3, columns: 50}
 		],
+		button_label: "继续"
 	};
 	timeline.push(final_questions);
+
+	// if not set, pick random ID
+	if (subject_id == null || subject_id == "") {
+		subject_id = random_file_id;
+	}
+
+	jsPsych.data.addProperties({
+		subject: subject_id,
+		list: list_id
+	});
+
+	var save_data = {
+		type: jsPsychPipe,
+		action: "save",
+		experiment_id: "9uzk0pO46pRZ",
+		filename: filename,
+		data_string: ()=>jsPsych.data.get().csv()
+	};
+	//timeline.push(save_data)
 
 	// show something at the end!
 	var end_screen = {
@@ -172,24 +193,6 @@
 	}
 	timeline.push(end_screen);
 
-	const save_data = {
-			type: jsPsychPipe,
-			action: "save",
-			experiment_id: "9uzk0pO46pRZ",
-			filename: filename,
-			data_string: ()=>jsPsych.data.get().csv()
-		};
-		timeline.push(save_data)
-
-	// if not set, pick random ID
-	if (subject_id == null || subject_id == "") {
-		subject_id = subject_no;
-	}
-
-	jsPsych.data.addProperties({
-		subject: subject_id,
-		list: list_id
-	});
 
 	// function saveData(name, data, list_id){
 	// 	var xhr = new XMLHttpRequest();
@@ -199,13 +202,14 @@
 	// }
 
 	jsPsych.init({
-		timeline: timeline,
+		timeline: timeline, save_data,
 		preload_images: images,
 		show_preload_progress_bar: false,
     	show_progress_bar: true,
 		message_progress_bar: '实验进度',
 		on_finish: function() {
-		    window.location.replace("https://google.com");
+		    //window.location.replace("https://google.com");
+			jsPsych.data.displayData('csv')
 		},
 		// on_trial_finish: function(){ saveData(subject_id, jsPsych.data.get().csv(), list_id); }
 	});

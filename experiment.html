@@ -27,7 +27,7 @@
    ========================================================= */
 // ---- EDIT these two to match your own study ----
 const DATAPIPE_EXPERIMENT_ID = "jrtOqRifJ8Jl";       // from pipe.jspsych.org
-const PROLIFIC_COMPLETION_URL = "https://google.com"; // from Prolific's "Study Completion" setup
+const PROLIFIC_COMPLETION_URL = "https://app.prolific.com/submissions/complete?cc=C1C0YADK"; // from Prolific's "Study Completion" setup
 
 // Fallback random ID generator, used only if the experiment is opened
 // outside of Prolific (e.g. while testing), so there's still always a
@@ -384,6 +384,12 @@ function make_trial_sequence(s, is_practice) {
 // =========================================================
 async function runExperiment() {
 
+  // Shown while we wait on DataPipe -- jsPsych doesn't touch document.body
+  // until jsPsych.run(timeline) actually starts below, so this stays visible
+  // the whole time getCondition() is pending and is automatically replaced
+  // once the timeline begins.
+  document.body.innerHTML = "<p>Loading, please wait...</p>";
+  
   // ---- Ask DataPipe which list (0-7) this participant is assigned to ----
   // Replaces the old `Math.floor(Math.random() * lists.length)` -- DataPipe
   // handles balanced assignment across participants for you. Make sure your

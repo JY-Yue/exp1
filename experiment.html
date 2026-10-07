@@ -383,12 +383,6 @@ function make_trial_sequence(s, is_practice) {
 // list this participant got, so it all has to wait for it.
 // =========================================================
 async function runExperiment() {
-
-  // Shown while we wait on DataPipe -- jsPsych doesn't touch document.body
-  // until jsPsych.run(timeline) actually starts below, so this stays visible
-  // the whole time getCondition() is pending and is automatically replaced
-  // once the timeline begins.
-  document.body.innerHTML = "<p>Loading, please wait...</p>";
   
   // ---- Ask DataPipe which list (0-7) this participant is assigned to ----
   // Replaces the old `Math.floor(Math.random() * lists.length)` -- DataPipe
